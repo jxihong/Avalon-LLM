@@ -154,7 +154,7 @@ class TaskWorker:
         # print("output got")
         return {
             "session_id": parameters.session_id,
-            "output": env_output.dict(),
+            "output": env_output.model_dump(),
         }
 
     async def interact(self, parameters: InteractRequest):
@@ -175,11 +175,11 @@ class TaskWorker:
         if response.status == SampleStatus.TASK_ERROR:
             raise HTTPException(status_code=501, detail={
                 "session_id": parameters.session_id,
-                "output": response.dict(),
+                "output": response.model_dump(),
             })
         return {
             "session_id": parameters.session_id,
-            "output": response.dict(),
+            "output": response.model_dump(),
         }
 
     async def cancel_all(self):
@@ -254,7 +254,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     conf = ConfigLoader().load_from(args.config)
-    asyncio_task = InstanceFactory.parse_obj(conf[args.name]).create()
+    asyncio_task = InstanceFactory.model_validate(conf[args.name]).create()
 
     app = FastAPI()
     router_ = APIRouter()

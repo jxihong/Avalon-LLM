@@ -194,7 +194,8 @@ class AvalonBench(Task):
                 private_informations = []
                 roles = []
                 # intended_team_list = []
-                if self.discussion:
+                self.discussion_history = []
+                if True:
                     print()
                     print(ColorMessage.cyan(f"##### Discussion Starts #####"))
                     print()
@@ -221,7 +222,7 @@ class AvalonBench(Task):
                     print(ColorMessage.blue(f"Player {leader}(Leader):") + " " + dialogue)
                     roles.append(player_list[leader].role)
                     dialogue_history.append(leader, dialogue)
-                    self.discussion_history.append(f"Player {leader}:\n{dialogue}")
+                    self.discussion_history.append(dialogue)
                     speaking_order.append(leader)
                     private_informations.append(player_list[leader].system_info)
                     # intended_team = await player_list[leader].propose_team(
@@ -244,13 +245,20 @@ class AvalonBench(Task):
                             dialogue_history    =   dialogue_history,
                             env                 =   env,
                         )
-                        print(ColorMessage.blue(f"Player {player_id}:") + " " + dialogue)
+                        try:
+                            role_removed_dialogue = dialogue.split(")")[1]
+                        except:
+                            role_removed_dialogue = dialogue
+                        print(ColorMessage.blue(f"Player {player_id}:") + " " + role_removed_dialogue)
                         roles.append(player.role)
-                        dialogue_history.append(player_id, dialogue)
-                        self.discussion_history.append(f"Player {player_id}:\n{dialogue}")
+                        dialogue_history.append(player_id, role_removed_dialogue)
+                        self.discussion_history.append(dialogue)
                         speaking_order.append(player_id)
                         private_informations.append(player.system_info)
 
+                    disc_history_str = '\n'.join(self.discussion_history)
+                    game_env_log.append("Discussion Phase")
+                    game_env_log.append(disc_history_str)
                     # query the intended teams after discussion
                     # for idx, player in enumerate(player_list):
                     #     proxy.set_current_agent(idx)

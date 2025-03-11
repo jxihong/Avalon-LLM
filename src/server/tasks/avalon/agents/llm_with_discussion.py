@@ -166,7 +166,7 @@ class LLMAgentWithDiscussion(Agent):
         else:
             self.session.inject({
                 "role": "user",
-                "content": DISCUSSION_SUFFIX
+                "content": DISCUSSION_SUFFIX.format(player_id=self.id, role=self.role_name)
             })
 
         dialogue = await self.session.action(receiver="all")

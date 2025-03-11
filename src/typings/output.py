@@ -1,6 +1,6 @@
 from typing import Union, List
 
-from pydantic import BaseModel, root_validator
+from pydantic import model_validator, BaseModel
 
 from . import ChatHistoryItem
 from .general import JSONSerializable, SampleIndex
@@ -24,7 +24,8 @@ class AgentOutput(BaseModel):
     content: Union[str, None] = None
 
     # at least one of them should be not None
-    @root_validator(pre=False, skip_on_failure=True)
+    @model_validator(mode='before')
+    @classmethod
     def post_validate(cls, instance: dict):
         assert (
             instance.get("status") is not AgentOutputStatus.NORMAL

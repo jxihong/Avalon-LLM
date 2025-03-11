@@ -25,7 +25,8 @@ class LangchainSession(Session):
             self.langchain_model = ChatOpenAI(
                 model=model_name,
                 temperature=temperature,
-                openai_api_key=key
+                openai_api_key=key,
+                stop="<END>"
             )
         elif "claude" in model_name:
             import os

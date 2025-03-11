@@ -59,5 +59,6 @@ avalon-dev-single-baseline:
 avalon-dev-multi:
   parameters:
     name: "AvalonBench-dev-multi"
-    data_file: "data/avalon/dev.json"
+    data_file: "data/avalon/dev_servant.json"
     agent_list: ["llm", "llm", "llm", "llm", "llm"]
+    discussion: True

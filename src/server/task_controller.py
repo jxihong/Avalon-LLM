@@ -368,7 +368,7 @@ class TaskController:
                 session.name,
                 session.worker_id,
                 "/interact",
-                data.dict(),
+                data.model_dump(),
             )
 
             if "output" not in result:

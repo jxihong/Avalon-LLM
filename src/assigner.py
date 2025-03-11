@@ -50,7 +50,7 @@ class Assigner:
         self.tqdm_ordered_by_agent = {}
         self.overall_tqdm = None
         self.config = config
-        self.free_worker = config.concurrency.copy(deep=True)
+        self.free_worker = config.concurrency.model_copy(deep=True)
         self.agents: Dict[str, AgentClient] = {}
         self.tasks: Dict[str, TaskClient] = {}
         self.task_indices: Dict[str, List[SampleIndex]] = {}
@@ -72,7 +72,7 @@ class Assigner:
             os.makedirs(self.config.output)
             # Write config file
             with open(os.path.join(self.config.output, "config.yaml"), "w") as f:
-                f.write(yaml.dump(self.config.dict()))
+                f.write(yaml.dump(self.config.model_dump()))
 
         # Step 2. walk through all the folders in output folder({output}/agent/task/runs.jsonl),
         # and remove the finished samples
@@ -359,7 +359,7 @@ class Assigner:
             json.dumps(
                 {
                     "index": index,
-                    **result.dict(),
+                    **result.model_dump(),
                     "time": {"timestamp": timestamp, "str": time_str},
                 }
             )
@@ -418,8 +418,8 @@ if __name__ == "__main__":
 
     loader = ConfigLoader()
     config_ = loader.load_from(args.config)
-    value = AssignmentConfig.parse_obj(config_)
+    value = AssignmentConfig.model_validate(config_)
     value = AssignmentConfig.post_validate(value)
-    v = value.dict()
+    v = value.model_dump()
     with std_out_err_redirect_tqdm() as orig_stdout:
         Assigner(value, args.retry).start(tqdm_out=orig_stdout)

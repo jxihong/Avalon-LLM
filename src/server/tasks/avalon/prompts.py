@@ -41,14 +41,23 @@ the Assassin can assassinate you and you will immediately lose the game.
                "Okay, I understand"],
     'Minion': ["""Tutorial on strategies:
 
-As you are playing the role of Minion of Modred in this game, here are some aspects you can consider when formulating strategies for making decisions.
+As you are playing the role of Minion of Mordred in this game, here are some aspects you can consider when formulating strategies for making decisions.
 
 1. Identity Declaration: You can pretend to be on the Good side and influence the Good players to make incorrect decisions.
+   - **Execution**: When declaring your identity, offhandedly mention how much you value the success of the Quests and how you genuinely want to support the Good players. Use language and reasoning typical of a Good player.
+   - **Subtlety**: Avoid being too vocal or overly enthusiastic about being Good, as it may raise suspicion. Instead, participate in discussions by asking questions and sharing observations about other players' behaviors.
+   - **Influence**: Encouraging Good players to make poor judgments about team compositions or suspecting other players can steer their decisions to the advantage of the Evil team.
     
 2. Accusation: Pretend to be from the Good side and accuse other players of being from the Evil side.
+   - **Target Selection**: Accuse players who seem confident or make a point of defending others too aggressively. This can make them seem suspicious and will shift focus away from you.
+   - **Evidence Gathering**: Pay attention to voting patterns and discussions. Use any inconsistencies or suspicious behavior (even if minor) as a basis for your accusations.
+   - **Creating Doubt**: Plant seeds of doubt that can lead Good players to question their alliances or voting intentions.
 
 3. Defense: When accused of being from the Evil side, insist that you are actually from the Good side.
-                        """,
+   - **Remain Calm**: When accused, stay composed and don’t lash out indiscriminately. This will lend you credibility with other players. Use logical reasoning to refute accusations.
+   - **Show Vulnerability**: Share your concerns about the uncertainty of the game and express doubt about your own decisions. This can help you appear more relatable and less suspicious.
+   - **Turn the tables**: Use the opportunity of being accused to pivot the focus back to the accuser. Point out any questionable behavior they’ve exhibited or how their actions could be seen as suspicious. This can deflect attention from yourself.
+""",
                         "Okay, I understand"],
     'Servant': ["""Tutorial on strategies:
 
@@ -63,14 +72,21 @@ As you are playing the role of Servant in this game, here are some aspects you c
                       "Okay, I understand"],
     'Assassin': ["""Tutorial on strategies:
 
-As you are playing the role of Assassin in this game, here are some aspects you can consider when formulating strategies for making decisions.
+1. Identity Declaration: You can pretend to be on the Good side and influence the Good players to make incorrect decisions.
+   - **Execution**: When declaring your identity, offhandedly mention how much you value the success of the Quests and how you genuinely want to support the Good players. Use language and reasoning typical of a Good player.
+   - **Subtlety**: Avoid being too vocal or overly enthusiastic about being Good, as it may raise suspicion. Instead, participate in discussions by asking questions and sharing observations about other players' behaviors.
+   - **Influence**: Encouraging Good players to make poor judgments about team compositions or suspecting other players can steer their decisions to the advantage of the Evil team.
+    
+2. Accusation: Pretend to be from the Good side and accuse other players of being from the Evil side.
+   - **Target Selection**: Accuse players who seem confident or make a point of defending others too aggressively. This can make them seem suspicious and will shift focus away from you.
+   - **Evidence Gathering**: Pay attention to voting patterns and discussions. Use any inconsistencies or suspicious behavior (even if minor) as a basis for your accusations.
+   - **Creating Doubt**: Plant seeds of doubt that can lead Good players to question their alliances or voting intentions.
 
-1. Identity Declaration: You can pretend to be from the Good side and influence the decission of the Good players
-
-2. Accusation: You can accuse any players to be on the Evil side to pretend you are Good.
-
-3. Defense: When accused, you can pretend to be from the Good side.
-                      """,
+3. Defense: When accused of being from the Evil side, insist that you are actually from the Good side.
+   - **Remain Calm**: When accused, stay composed and don’t lash out indiscriminately. This will lend you credibility with other players. Use logical reasoning to refute accusations.
+   - **Show Vulnerability**: Share your concerns about the uncertainty of the game and express doubt about your own decisions. This can help you appear more relatable and less suspicious.
+   - **Turn the tables**: Use the opportunity of being accused to pivot the focus back to the accuser. Point out any questionable behavior they’ve exhibited or how their actions could be seen as suspicious. This can deflect attention from yourself.
+""",
                       "Okay, I understand"]
 
 }
@@ -151,4 +167,6 @@ INFO_ROLE = """"There are {} players, including Player 0, Player 1, Player 2, Pl
 INFO_YOUR_ROLE = """You are {}, with identity {}. You are on the side of {}. Please do not forget your identity throughout the game.
 """
 
-DISCUSSION_SUFFIX = """\nProduce dialogue that aligns with your goals for the discussion. Note that dialogue will be seen by all players in the game. **Do not reveal** your identity or the identities of other players in the dialogue."""
+DISCUSSION_SUFFIX = """\nProduce dialogue that aligns with your goals for the discussion. Note that dialogue will be seen by all players in the game. **Do not reveal** your identity or the identities of other players in the dialogue. 
+Your output should be in the following format: 
+({role}) Player {player_id}: Next utterance by player in the dialogue <END> """
