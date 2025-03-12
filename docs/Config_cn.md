@@ -152,4 +152,4 @@ configs
 
 - `definition`: 用于定义任务，通常import自`task_assembly.yaml`。
 - `start(Optional)`: 用于指定需要启动的任务，键是任务名称，值是需要启动的worker的个数。
-- `controller_address(Optional)`: 用于指定controller的地址，默认http://localhost:5000/api/
+- `controller_address(Optional)`: 用于指定controller的地址，默认http://localhost:5001/api/

@@ -70,6 +70,6 @@ task_worker的参数如下：
 - `NAME` 任务名称，用于指定要启动的任务。
 - `[--config | -c CONFIG]` 指定要读取的配置文件，默认为`configs/tasks/task_assembly.yaml`。
 - `[--port | -p PORT]` 指定task_worker的端口，默认为5001。
-- `[--controller | -C ADDRESS]` 指定task_controller的地址，默认为http://localhost:5000/api 。
+- `[--controller | -C ADDRESS]` 指定task_controller的地址，默认为http://localhost:5001/api 。
 - `[--self ADDRESS]` 指定task_worker的地址，默认为http://localhost:5001/api
   ，此地址将会被task_controller用于与task_worker通信，所以需要确保task_controller能够访问到此地址。

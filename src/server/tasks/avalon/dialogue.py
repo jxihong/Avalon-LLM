@@ -27,7 +27,7 @@ class Dialogue(ABC):
         self.dialogue_list.append((speaker, dialogue))
 
 
-class AvalonDiagloue(Dialogue):
+class AvalonDialogue(Dialogue):
     """
     The class for Avalon dialogue.
     """
@@ -37,6 +37,6 @@ class AvalonDiagloue(Dialogue):
     def _dialogue_tuple_to_list(self) -> List[str]:
         dialogue_list = []
         for speaker, dialogue in self.dialogue_list:
-            dialogue_list.append(f"Player {speaker} says: {dialogue}")
+            dialogue_list.append(f"Player {speaker}:{dialogue}")
 
         return dialogue_list

@@ -168,5 +168,15 @@ INFO_YOUR_ROLE = """You are {}, with identity {}. You are on the side of {}. Ple
 """
 
 DISCUSSION_SUFFIX = """\nProduce dialogue that aligns with your goals for the discussion. Note that dialogue will be seen by all players in the game. **Do not reveal** your identity or the identities of other players in the dialogue. 
-Your output should be in the following format: 
-({role}) Player {player_id}: Next utterance by player in the dialogue <END> """
+Your output should be in the following format, where <NEXT UTTERANCE> should be replaced by the utterance by the player, and followed by <END>: 
+Player {player_id} ({role}):<NEXT UTTERANCE><END>"""
+
+# Make the discussion more dynamic
+CHOOSE_NEXT_SPEAKER = """Below is an ongoing discussion between players in a game of The Resistance: Avalon: \
+
+{discussion} 
+
+Based on the discussion so far, choose the next player to speak. \
+Analyze social cues such as if a particular player was asked a question that warrants a response. Otherwise, choose a player who has not spoken yet. \
+If every player has spoken and the discussion seems to have ended, output <END> instead. Your output should either be an integer 0-4 or <END> and nothing else.
+"""

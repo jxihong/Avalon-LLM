@@ -28,9 +28,11 @@ import logging
 from strategist.dialogue_improve.data_loader import DataLoader
 from strategist.Avalon.baseline_models_Avalon import AvalonState
 from good_examples.Avalon.value_heuristics.list import functions as avalon_func
-from .dialogue import AvalonDiagloue
+from .dialogue import AvalonDialogue
 from good_examples.Avalon.english import role_to_guide as search_guide
 from good_examples.Avalon.recon import role_to_guide as recon_guide
+
+from strategist.searchlightimprove.llm_utils.llm_api_models import GPT35Multi
 
 AGENT_FINDER = {
     'naive': find_naive_agent,
@@ -66,6 +68,13 @@ class AvalonBench(Task):
         self.FILE_PATH = 'search_src/dialogue_improve/new_data04.jsonl'
         self.discussion_history = []
         self.data_loader = DataLoader()
+
+        self.llm_model= None 
+        try:
+            self.llm_model = GPT35Multi()
+        except Exception as e:
+            print(e)
+            self.logger.warning(f"Error initializing LLM-guided discussion: {str(e)}")
 
     def calculate_overall(self, results: List[TaskOutput]) -> Dict[str, Any]:
         outputs = [None for _ in range(len(self.data))]
@@ -116,7 +125,7 @@ class AvalonBench(Task):
                 f"Number of players {num_players} doesn't match number of sessions {len(sessions)}"
             )
         
-        dialogue_history = AvalonDiagloue()
+        dialogue_history = AvalonDialogue()
 
         print("Check initialization")
         # Initialize players. Please remember to let Merlin and Evil players see the sides of all players.
@@ -193,9 +202,11 @@ class AvalonBench(Task):
                 speaking_order = []
                 private_informations = []
                 roles = []
+                discussion = []
+                has_spoken = {i: False for i in range(num_players)}
                 # intended_team_list = []
-                self.discussion_history = []
-                if True:
+                if self.discussion:
+                    game_env_log.append("Discussion Phase")
                     print()
                     print(ColorMessage.cyan(f"##### Discussion Starts #####"))
                     print()
@@ -219,12 +230,15 @@ class AvalonBench(Task):
                             env                 =   env,
                             dialogue_history    =   dialogue_history,
                         )
-                    print(ColorMessage.blue(f"Player {leader}(Leader):") + " " + dialogue)
+                    utterance = dialogue.split(":")[1]
+                    print(dialogue)
+                    game_env_log.append(dialogue)
                     roles.append(player_list[leader].role)
-                    dialogue_history.append(leader, dialogue)
-                    self.discussion_history.append(dialogue)
+                    dialogue_history.append(leader, utterance)
                     speaking_order.append(leader)
                     private_informations.append(player_list[leader].system_info)
+                    discussion.append(dialogue)
+                    has_spoken[leader] = True
                     # intended_team = await player_list[leader].propose_team(
                     #     team_size           =   env.get_team_size(),
                     #     mission_id          =   env.turn,
@@ -232,9 +246,22 @@ class AvalonBench(Task):
                     # )
                     # intended_team_list.append(list(intended_team))
 
-                    # Discussion (sequential, once, in order for now) and Summarize
-                    for idx in range(leader+1, leader + num_players):
+                    # Discussion (adaptive)
+                    for idx in range(leader+1, leader+2*num_players):
                         player_id = idx % num_players
+                        if self.llm_model is not None:
+                            next_player = self.llm_model.generate(
+                                CHOOSE_NEXT_SPEAKER.format(discussion='\n'.join(discussion))
+                            )
+                            if next_player == "<END>":
+                                break
+                            try:
+                                player_id = int(next_player)
+                            except:
+                                has_not_spoken = [i for i in has_spoken.keys() if not has_spoken[i]]
+                                # Choose random player who has not spoken
+                                if len(has_not_spoken) > 0:
+                                    player_id = random.choice(has_not_spoken)
                         player = player_list[player_id]
                     # for idx, player in enumerate(player_list):
                         proxy.set_current_agent(player_id)
@@ -245,20 +272,16 @@ class AvalonBench(Task):
                             dialogue_history    =   dialogue_history,
                             env                 =   env,
                         )
-                        try:
-                            role_removed_dialogue = dialogue.split(")")[1]
-                        except:
-                            role_removed_dialogue = dialogue
-                        print(ColorMessage.blue(f"Player {player_id}:") + " " + role_removed_dialogue)
+                        utterance = dialogue.split(":")[1]
+                        print(dialogue)
+                        game_env_log.append(dialogue)
                         roles.append(player.role)
-                        dialogue_history.append(player_id, role_removed_dialogue)
-                        self.discussion_history.append(dialogue)
+                        dialogue_history.append(player_id, utterance)
                         speaking_order.append(player_id)
                         private_informations.append(player.system_info)
+                        discussion.append(dialogue)
+                        has_spoken[player_id] = True
 
-                    disc_history_str = '\n'.join(self.discussion_history)
-                    game_env_log.append("Discussion Phase")
-                    game_env_log.append(disc_history_str)
                     # query the intended teams after discussion
                     # for idx, player in enumerate(player_list):
                     #     proxy.set_current_agent(idx)
@@ -273,7 +296,6 @@ class AvalonBench(Task):
                     # for idx, player in enumerate(player):
                     #     proxy.set_current_agent(idx)
                     #     player.discussion_end(
-                    #         leader              =   leader,
                     #         leader_statement    =   statement,
                     #     )
                     # for idx, player in enumerate(player_list):

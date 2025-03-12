@@ -246,10 +246,10 @@ if __name__ == "__main__":
         "--config", "-c", type=str, default="configs/tasks/task_assembly.yaml"
     )
     parser.add_argument(
-        "--controller", "-C", type=str, default="http://localhost:5000/api"
+        "--controller", "-C", type=str, default="http://localhost:5001/api"
     )
-    parser.add_argument("--self", "-s", type=str, default="http://localhost:5001/api")
-    parser.add_argument("--port", "-p", type=int, default=5001)
+    parser.add_argument("--self", "-s", type=str, default="http://localhost:5002/api")
+    parser.add_argument("--port", "-p", type=int, default=5002)
 
     args = parser.parse_args()
 

@@ -45,7 +45,7 @@ Parameters for start_task:
   where `TASK_NAME` is the task name and `NUM` is the number of workers to start. If this parameter is specified, it
   will override **all** settings in the configuration file.
 - `[--auto-controller | -a]`: Specifies whether to automatically start the task_controller. Default is off.
-- `[--base-port | -p PORT]`: Specifies the base port for task_worker. Default is 5001. Task_workers will start
+- `[--base-port | -p PORT]`: Specifies the base port for task_worker. Default is 5002. Task_workers will start
   sequentially from PORT. If there are N task_workers, then their ports will range from PORT to PORT+N-1.
 
 ## src.assigner
@@ -74,8 +74,8 @@ Parameters for task_worker:
 
 - `NAME` is the task name, specifying which task to start.
 - `[--config | -c CONFIG]` Specifies the configuration file to read. Default is `configs/tasks/task_assembly.yaml`.
-- `[--port | -p PORT]` Specifies the port for the task_worker. Default is 5001.
-- `[--controller | -C ADDRESS]` Specifies the address of the task_controller. Default is http://localhost:5000/api.
-- `[--self ADDRESS]` Specifies the address of the task_worker. Default is http://localhost:5001/api. This address is
+- `[--port | -p PORT]` Specifies the port for the task_worker. Default is 5002.
+- `[--controller | -C ADDRESS]` Specifies the address of the task_controller. Default is http://localhost:5001/api.
+- `[--self ADDRESS]` Specifies the address of the task_worker. Default is http://localhost:5002/api. This address is
   used by the task_controller to communicate with the task_worker, so make sure the task_controller can access this
   address.

@@ -157,7 +157,7 @@ class LLMAgentWithDiscussion(Agent):
         # await self.summarize()
 
         fails_required = self.config.num_fails_for_quest[mission_id]
-        content_prompt = CHOOSE_TEAM_LEADER + DISCUSSION_SUFFIX
+        content_prompt = CHOOSE_TEAM_LEADER + DISCUSSION_SUFFIX.format(player_id=self.id, role=self.role_name)
         if self.id == team_leader_id:
             self.session.inject({
                 "role": "user",
@@ -166,12 +166,11 @@ class LLMAgentWithDiscussion(Agent):
         else:
             self.session.inject({
                 "role": "user",
-                "content": DISCUSSION_SUFFIX.format(player_id=self.id, role=self.role_name)
+                "content": DISCUSSION_SUFFIX.format(player_id=self.id, role=self.role_name),
             })
 
         dialogue = await self.session.action(receiver="all")
-        print(f"Output: {dialogue}")
-        return dialogue
+        return dialogue.split("<END>")[0]
 
 
     async def quest_discussion(self, team_size, team, team_leader_id, discussion_history, mission_id, **kwargs):
